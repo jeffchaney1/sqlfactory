@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40418.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLFactory", "SQLFactory\SQLFactory.csproj", "{BE95EB5F-B67D-4E86-8CA7-F14B3A34B42B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Tests", "Library.Tests\Library.Tests.csproj", "{7B9C8CCC-9833-426B-84FA-11B3F3B7B31B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE95EB5F-B67D-4E86-8CA7-F14B3A34B42B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE95EB5F-B67D-4E86-8CA7-F14B3A34B42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE95EB5F-B67D-4E86-8CA7-F14B3A34B42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE95EB5F-B67D-4E86-8CA7-F14B3A34B42B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9C8CCC-9833-426B-84FA-11B3F3B7B31B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9C8CCC-9833-426B-84FA-11B3F3B7B31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9C8CCC-9833-426B-84FA-11B3F3B7B31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9C8CCC-9833-426B-84FA-11B3F3B7B31B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
