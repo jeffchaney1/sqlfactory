@@ -8,7 +8,20 @@ namespace Library.SQLFactory
 {
     public class ConditionInSelect : Condition
     {
-        public String ValueExpression { get; set; }
+        private String valueExpression = "";
+        public String ValueExpression
+        {
+            get
+            {
+                return valueExpression;
+            }
+            set
+            {
+                valueExpression = value;
+                AddDelimiters = SQLFactory.IsIdentOnly(valueExpression);
+            }
+        }
+        public bool AddDelimiters { get; set; }
 
         private SQLSelectFactory subSelect = null;
         public SQLSelectFactory SubSelect {
@@ -29,7 +42,11 @@ namespace Library.SQLFactory
             if (IsNegative)
                 sql.Append("( NOT ");
             sql.Append('(');
+            if (AddDelimiters)
+                sql.Append('[');
             sql.Append(this.ValueExpression);
+            if (AddDelimiters)
+                sql.Append(']');
             sql.Append(" IN (\n");
             SubSelect.BuildSQL(sql, parameters, indent + SQLFactory.STD_INDENT);
             sql.Append(") )");

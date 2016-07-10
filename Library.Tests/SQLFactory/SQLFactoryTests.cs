@@ -197,6 +197,20 @@ namespace Library.Tests.SQLFactory
                 .Conditions.Add(new string[] { "COL3 > 10", "COL4 < COL5" });
             AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50) AND (COL2 < 0) AND ((COL3 > 10) OR (COL4 < COL5))", SELECT.BuildSQL());
 
+            SELECT.Where.Clear();
+            SELECT.Where.AddInList("COL1", new String[] { "VALUE1", "VALUE2", "VALUE3" });
+
+            AssertSQL.AreEqual("SELECT * FROM [table] WHERE ([COL1] in ('VALUE1', 'VALUE2', 'VALUE3') )", SELECT.BuildSQL());
+
+            var subSelect = SELECT.Where.AddInSelect("COL2").SubSelect;
+            subSelect.FromTable.TableName = "table2";
+            subSelect.Columns.Add("RID");
+            subSelect.Where.Add("COL3 > 20");
+            AssertSQL.AreEqual("SELECT * FROM [table] " + 
+                               " WHERE ([COL1] in ('VALUE1', 'VALUE2', 'VALUE3') )" + 
+                               "  AND ([COL2] in (SELECT [RID] FROM [table2] WHERE (COL3 > 20) )"
+                               , SELECT.BuildSQL());
+
         }
 
         [TestMethod]
@@ -270,12 +284,13 @@ namespace Library.Tests.SQLFactory
             SELECT.Columns.Add(new string[] { "COL1", "COL2", "COL3" });
 
             SELECT.OrderBy.Add("COL1");
-            SELECT.OrderBy.Add(SELECT.Columns.Column("COL2"));
+            SELECT.OrderBy.Add(SELECT.Columns.Column("COL2")).IsDescending = true; 
 
             AssertSQL.AreEqual("SELECT [COL1], [COL2], [COL3] " +
                                "  FROM [table] " +
-                               " ORDER BY [COL1], [COL2]", SELECT.BuildSQL());
+                               " ORDER BY [COL1], [COL2] DESC", SELECT.BuildSQL());
 
         }
-    }
+
+     }
 }

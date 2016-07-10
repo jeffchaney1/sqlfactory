@@ -8,7 +8,19 @@ namespace Library.SQLFactory
 {
     public class ConditionInList : Condition
     {
-        public String ValueExpression { get; set; }
+        private String valueExpression = "";
+        public String ValueExpression {
+            get
+            {
+                return valueExpression;
+            }
+            set
+            {
+                valueExpression = value;
+                AddDelimiters = SQLFactory.IsIdentOnly(valueExpression);
+            }
+        }
+        public bool AddDelimiters { get; set; }
         private List<String> rawValues = new List<String>();
 
         public ConditionInList AddValues(Object[] values)
@@ -39,12 +51,16 @@ namespace Library.SQLFactory
                 if (IsNegative)
                     sql.Append("(NOT ");
                 sql.Append('(');
+                if (AddDelimiters)
+                    sql.Append('[');
                 sql.Append(ValueExpression);
+                if (AddDelimiters)
+                    sql.Append(']');
                 sql.Append(" IN (");
                 sql.Append(rawValues.ElementAt(0));
                 foreach (String value in rawValues.Skip(1))
                 {
-                    sql.Append(',');
+                    sql.Append(", ");
                     sql.Append(value);
                 }
                 sql.Append(") ) ");

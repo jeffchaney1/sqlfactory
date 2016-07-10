@@ -33,12 +33,11 @@ namespace Library.Tests
                     while (epos < expected.Length && char.IsWhiteSpace(expC))
                     {
                         epos++;
-                        expC = expected[epos];
                     }
                     while (apos < actual.Length && char.IsWhiteSpace(actC))
                     {
                         apos++;
-                        actC = actual[apos];
+                       
                     }
                 }
                 else if (expC != actC)
