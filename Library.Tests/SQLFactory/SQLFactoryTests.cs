@@ -144,12 +144,137 @@ namespace Library.Tests.SQLFactory
             col.AddDelimiters = false;
             Assert.AreEqual("SELECT [COL1], [COL2] [COL2_ALIAS], table.COL3 COL3_ALIAS \nFROM [table]", SELECT.BuildSQL());
 
-            SELECT.Columns.Add(new String[] {"COL4", "COL5 COL5_ALIAS", "table.COL6 COL6_ALIAS"});
-            Assert.AreEqual("SELECT [COL1], [COL2] [COL2_ALIAS], table.COL3 COL3_ALIAS, COL4 \n" + STD_INDENT + 
-                            "[COL5] [COL5_ALIAS], [table].[COL6] [COL6_ALIAS] \n" +
+            SELECT.Columns.Add(new String[] { "COL4", "COL5 COL5_ALIAS", "table.COL6 COL6_ALIAS" });
+            AssertSQL.AreEqual("SELECT [COL1], [COL2] [COL2_ALIAS], table.COL3 COL3_ALIAS, [COL4], " +
+                            "[COL5] [COL5_ALIAS], [table].[COL6] [COL6_ALIAS] " +
                             "FROM [table]"
                             , SELECT.BuildSQL());
-            
+
+
+        }
+
+        [TestMethod]
+        public void TestTopCount()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.TopCount = 100;
+
+            AssertSQL.AreEqual("SELECT TOP 100 * FROM [table]", SELECT.BuildSQL());
+
+            SELECT.Columns.Add(new string[] { "COL1", "COL2" });
+            AssertSQL.AreEqual("SELECT TOP 100 [COL1], [COL2] FROM [table]", SELECT.BuildSQL());
+        }
+
+        [TestMethod]
+        public void TestDistinct()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.Distinct = true;
+
+            AssertSQL.AreEqual("SELECT DISTINCT * FROM [table]", SELECT.BuildSQL());
+
+            SELECT.Columns.Add(new string[] { "COL1", "COL2" });
+            AssertSQL.AreEqual("SELECT DISTINCT [COL1], [COL2] FROM [table]", SELECT.BuildSQL());
+
+        }
+
+        [TestMethod]
+        public void TestWhere()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.Where.Add("COL1 = 50");
+
+            AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50)", SELECT.BuildSQL());
+
+            SELECT.Where.Add("COL2 < 0");
+
+            AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50) AND (COL2 < 0)", SELECT.BuildSQL());
+
+            SELECT.Where.AddGroup(ConditionLinkOperator.loOR)
+                .Conditions.Add(new string[] { "COL3 > 10", "COL4 < COL5" });
+            AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50) AND (COL2 < 0) AND ((COL3 > 10) OR (COL4 < COL5))", SELECT.BuildSQL());
+
+        }
+
+        [TestMethod]
+        public void TestAdditionalConditions()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.AdditionalConditions.Add("COL1 = 50");
+
+            AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50)", SELECT.BuildSQL());
+
+            SELECT.AdditionalConditions.Add("COL2 < 0");
+
+            AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50) AND (COL2 < 0)", SELECT.BuildSQL());
+
+            SELECT.AdditionalConditions.AddGroup(ConditionLinkOperator.loOR)
+                .Conditions.Add(new string[] { "COL3 > 10", "COL4 < COL5" });
+            AssertSQL.AreEqual("SELECT * FROM [table] " + 
+                               " WHERE (COL1 = 50) AND (COL2 < 0) " + 
+                               "   AND ((COL3 > 10) OR (COL4 < COL5))"
+                               , SELECT.BuildSQL());
+
+            SELECT.Where.Add("COL0 IS NOT NULL");
+            AssertSQL.AreEqual("SELECT * FROM [table] " +
+                               " WHERE (COL0 IS NOT NULL) AND (COL1 = 50) " +
+                               "  AND (COL2 < 0) AND ((COL3 > 10) OR (COL4 < COL5))"
+                              , SELECT.BuildSQL());
+
+        }
+
+        [TestMethod]
+        public void TestHaving()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.Having.Add("COL1 = 50");
+
+            AssertSQL.AreEqual("SELECT * FROM [table] HAVING (COL1 = 50)", SELECT.BuildSQL());
+
+            SELECT.Having.Add("COL2 < 0");
+
+            AssertSQL.AreEqual("SELECT * FROM [table] HAVING (COL1 = 50) AND (COL2 < 0)", SELECT.BuildSQL());
+
+            //SELECT.Where.AddGroup(ConditionLinkOperator.loOR)
+            //    .Conditions.Add(new string[] { "COL3 > 10", "COL4 < COL5" });
+            //AssertSQL.AreEqual("SELECT * FROM [table] WHERE (COL1 = 50) AND (COL2 < 0) AND ((COL3 > 10) OR (COL4 < COL5))", SELECT.BuildSQL());
+
+        }
+
+        [TestMethod]
+        public void TestGroupBy()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.Columns.Add(new string[] { "COL1", "COL2", "SUM(COL3)" });
+
+            SELECT.GroupBy.Add("COL1");
+            SELECT.GroupBy.Add(SELECT.Columns.Column("COL2"));
+
+            AssertSQL.AreEqual("SELECT [COL1], [COL2], SUM(COL3) " + 
+                               "  FROM [table] " + 
+                               " GROUP BY [COL1], [COL2]", SELECT.BuildSQL());
+
+        }
+
+        [TestMethod]
+        public void TestOrderBy()
+        {
+            SQLSelectFactory SELECT = new SQLSelectFactory();
+            SELECT.FromTable.TableName = "table";
+            SELECT.Columns.Add(new string[] { "COL1", "COL2", "COL3" });
+
+            SELECT.OrderBy.Add("COL1");
+            SELECT.OrderBy.Add(SELECT.Columns.Column("COL2"));
+
+            AssertSQL.AreEqual("SELECT [COL1], [COL2], [COL3] " +
+                               "  FROM [table] " +
+                               " ORDER BY [COL1], [COL2]", SELECT.BuildSQL());
 
         }
     }

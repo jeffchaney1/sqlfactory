@@ -6,6 +6,23 @@ using System.Threading.Tasks;
 
 public static class StringExtensions
 {
+    public static String SubstringSafe(this String s, int beginningIndex, int length = Int32.MaxValue)
+    {
+        if (s == null)
+            return "";
+
+        if (beginningIndex < 0)
+            beginningIndex = 0;
+        if (beginningIndex > s.Length)
+            beginningIndex = s.Length - 1;
+        if (length < 0)
+            length = 0;
+        if ((length == Int32.MaxValue) || (beginningIndex + length >= s.Length))
+            length = s.Length - beginningIndex;
+
+        return s.Substring(beginningIndex, length);
+    }
+
     public static String ParseNext(this String s, out String result, String Delimiters = ",", String Quotes = "\"", String Brackets = "[]()")
     {
         if (s == null)

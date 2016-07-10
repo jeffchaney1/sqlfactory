@@ -31,6 +31,7 @@ namespace Library.SQLFactory
             }
             else
                 result.ColumnName = columnName.Trim();
+            this.Insert(columnPosition, result);
             return result;
         }
 

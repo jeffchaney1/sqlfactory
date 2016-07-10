@@ -114,7 +114,7 @@ namespace Library.SQLFactory
             foreach (SQLElementItem element in this.Skip(1))
             {
                 sql.Append(", ");
-                if (fieldsWithoutBreak >= this.ColumnsPerRow)
+                if (fieldsWithoutBreak > this.ColumnsPerRow)
                 {
                     sql.Append(" \n");
                     sql.Append(indent);

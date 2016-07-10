@@ -50,13 +50,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AssertSQL.cs" />
     <Compile Include="Collection\CollectionTests.cs" />
     <Compile Include="Enum\EnumTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLFactory\ConditionTests.cs" />
     <Compile Include="SQLFactory\FieldValueTests.cs" />
     <Compile Include="SQLFactory\SQLFactoryTests.cs" />
-    <Compile Include="String\StringExtensionsTexts.cs" />
+    <Compile Include="String\StringExtensionsTests.cs" />
     <Compile Include="UnitTests1.cs" />
   </ItemGroup>
   <ItemGroup />

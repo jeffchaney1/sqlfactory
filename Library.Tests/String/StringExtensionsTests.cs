@@ -8,8 +8,22 @@ using System.Threading.Tasks;
 namespace Library.Tests.StringTests
 {
     [TestClass]
-    public class StringExtensionsTexts
+    public class StringExtensionsTests
     {
+        [TestMethod]
+        public void TestSubstringSafe()
+        {
+
+            Assert.AreEqual("bcd", "abcdef".SubstringSafe(1, 3));
+            Assert.AreEqual("ef", "abcdef".SubstringSafe(4, 5));
+            Assert.AreEqual("ab", "abcdef".SubstringSafe(-1, 2));
+            Assert.AreEqual("abcdef", "abcdef".SubstringSafe(0));
+            Assert.AreEqual("def", "abcdef".SubstringSafe(3));
+
+            String NULL = null;
+            Assert.AreEqual("", NULL.SubstringSafe(-1, 2));
+        }
+
         [TestMethod]
         public void TestParseNext()
         {

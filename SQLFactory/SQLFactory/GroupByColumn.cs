@@ -18,6 +18,7 @@ namespace Library.SQLFactory
             GroupByColumn result = new GroupByColumn();
             result.TableName = tableName;
             result.ColumnName = columnName.Trim();
+            this.Insert(columnPosition, result);
             return result;
         }
 
