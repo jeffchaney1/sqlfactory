@@ -206,6 +206,14 @@ namespace Library.SQLFactory
             return this.Insert(this.Count, columnName);
         }
 
+        public void AddColumns(params String[] columnNames)
+        {
+            foreach(var columnName in columnNames)
+            {
+                this.Insert(this.Count, columnName);
+            }
+        }
+
 
         public FieldValue Insert(int columnPos, String columnName, bool literalValue)
         {

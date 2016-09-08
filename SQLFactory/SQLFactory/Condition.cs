@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.SQLFactory.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,7 +66,7 @@ namespace Library.SQLFactory
             else
                 result.Expression = expression;
 
-            if (value != SQLFactory.UNDEFINED)
+            if (!SQLFactory.UNDEFINED.Equals(value))
             {
                 result.LiteralValue = value;
                 result.UseRaw = useRaw;
@@ -73,6 +74,38 @@ namespace Library.SQLFactory
             this.Add(result);
 
             return result;
+        }
+
+        public SimpleCondition Add(FieldValue column, Boolean notNegative=true)
+        {
+            SimpleCondition result = new SimpleCondition();
+            result.LinkOperator = this.DefaultLink;
+            if (   (column.IsLiteral && (column.LiteralValue == null))
+                || (column.IsParameter && (column.Parameters.First() == null)))
+            {
+                result.Expression = "[" + column.Name + "] IS " + (notNegative ? "": "NOT ")+ "NULL";
+            }
+            else if (column.IsParameter)
+            {
+                result.Expression = "[" + column.Name + "] = :";
+                result.Parameters.AddParameters(column.Parameters);
+            }
+            else
+            {
+                StringBuilder sql = new StringBuilder();
+                column.BuildValue(sql, null); 
+
+                result.Expression = "[" + column.Name + "] = " + sql.ToString();
+            }
+
+            return result;
+        }
+
+        public ConditionList Or(Action<ConditionList> conditionBuilder)
+        {
+            ConditionList result = new ConditionList();
+            this.AddGroup(ConditionLinkOperator.loOR)
+            return this;
         }
 
         public ConditionList Add(String[] fields, Object[] values = null)
@@ -139,5 +172,6 @@ namespace Library.SQLFactory
         }
 
     }
+
 
 }

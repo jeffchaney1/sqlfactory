@@ -179,7 +179,7 @@ namespace Library.Tests.SQLFactory
             StringBuilder sql = new StringBuilder();
             inList.BuildSQL(sql, null, "");
 
-            Assert.AreEqual("(Field1 IN ('Value 1','second Value','Value 3') ) ", sql.ToString());
+            AssertSQL.AreEqual("([Field1] IN ('Value 1','second Value','Value 3') ) ", sql.ToString());
 
 
         }
@@ -210,7 +210,7 @@ namespace Library.Tests.SQLFactory
             StringBuilder sql = new StringBuilder();
             where.BuildSQL(sql, null, "");
 
-            Assert.AreEqual("([Field1] = 'test value 1')\n" +
+            AssertSQL.AreEqual("([Field1] = 'test value 1')\n" +
                             "AND (" + 
                                    "("  +
                                         "(Field2 > 20)\n" +
@@ -225,5 +225,15 @@ namespace Library.Tests.SQLFactory
                             "AND (Field7 IN ('one','two','three','four') ) "
                             , sql.ToString());
         }
+        //[TestMethod]
+        //public void TestActionBuilder()
+        //{
+        //    ConditionList where = new ConditionList();
+        //    where.Add(x =>
+        //        x.Add(c => c.Expression("TEST").Value("TEST"));
+        //        x.Add(c => c.Expression("TEST").Value("TEST"));
+        //    );
+        //}
     }
+
 }

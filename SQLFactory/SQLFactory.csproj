@@ -46,6 +46,8 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLFactory\Builders\ConditionBuilder.cs" />
+    <Compile Include="SQLFactory\Builders\IHideObjectMembers.cs" />
     <Compile Include="SQLFactory\Column.cs" />
     <Compile Include="SQLFactory\Condition.cs" />
     <Compile Include="SQLFactory\ConditionGroup.cs" />
@@ -60,9 +62,13 @@
     <Compile Include="SQLFactory\Parameters.cs" />
     <Compile Include="SQLFactory\SelectColumn.cs" />
     <Compile Include="SQLFactory\SimpleCondition.cs" />
+    <Compile Include="SQLFactory\SQLDeleteFactory.cs" />
     <Compile Include="SQLFactory\SQLElement.cs" />
     <Compile Include="SQLFactory\SQLFactory.cs" />
+    <Compile Include="SQLFactory\SQLInsertFactory.cs" />
+    <Compile Include="SQLFactory\SQLModifyFactory.cs" />
     <Compile Include="SQLFactory\SQLSelectFactory.cs" />
+    <Compile Include="SQLFactory\SQLUpdateFactory.cs" />
     <Compile Include="SQLFactory\Table.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -168,11 +168,11 @@ public static class StringExtensions
     {
         if (value != null)
         {
-            if (value.StartsWith(beginningBracket))
+            if (!value.StartsWith(beginningBracket))
             {
                 value = beginningBracket + value;
             }
-            if (value.EndsWith(endingBracket))
+            if (!value.EndsWith(endingBracket))
             {
                 value = value + endingBracket;
             }

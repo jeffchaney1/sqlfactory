@@ -56,7 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLFactory\ConditionTests.cs" />
     <Compile Include="SQLFactory\FieldValueTests.cs" />
-    <Compile Include="SQLFactory\SQLFactoryTests.cs" />
+    <Compile Include="SQLFactory\SQLDeleteFactoryTests.cs" />
+    <Compile Include="SQLFactory\SQLSelectFactoryTests.cs" />
+    <Compile Include="SQLInsertFactoryTests.cs" />
     <Compile Include="String\StringExtensionsTests.cs" />
     <Compile Include="UnitTests1.cs" />
   </ItemGroup>

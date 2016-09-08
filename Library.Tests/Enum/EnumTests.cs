@@ -41,7 +41,7 @@ namespace Library.Tests.Enum
             //new TestingEnum("test");
             EnumTests.Seal();
 
-            EnumTests value;
+            //EnumTests value;
 
             Assert.AreEqual("One", EnumTests.teOne.Name);
             Assert.AreEqual(0, EnumTests.teOne.Ordinal);

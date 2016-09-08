@@ -9,9 +9,9 @@ using Library.SQLFactory;
 namespace Library.Tests.SQLFactory
 {
     [TestClass]
-    public class SQLFactoryTests
+    public class SQLSelectFactoryTests
     {
-        static String STD_INDENT = Library.SQLFactory.SQLFactory.STD_INDENT;
+        //static String STD_INDENT = Library.SQLFactory.SQLFactory.STD_INDENT;
 
         [TestMethod]
         public void TestColumnInfo()
@@ -70,7 +70,7 @@ namespace Library.Tests.SQLFactory
         //}
 
         [TestMethod]
-        public void TestSQLFactoryFromTable()
+        public void TestSQLSelectFactoryFromTable()
         {
             SQLSelectFactory SELECT = new SQLSelectFactory();
             SELECT.FromTable.TableName = "USERS";
@@ -125,17 +125,17 @@ namespace Library.Tests.SQLFactory
         {
             SQLSelectFactory SELECT = new SQLSelectFactory();
             SELECT.FromTable.TableName = "table";
-            SelectColumn col = SELECT.Columns.Add("COL1");
+            SelectColumn col = SELECT.Columns.Add1("COL1");
             Assert.AreEqual("COL1", col.ColumnName);
             Assert.AreEqual("COL1", col.ColumnAlias);
             Assert.AreEqual("SELECT [COL1] \nFROM [table]", SELECT.BuildSQL());
 
-            col = SELECT.Columns.Add("COL2 COL2_ALIAS");
+            col = SELECT.Columns.Add1("COL2 COL2_ALIAS");
             Assert.AreEqual("COL2", col.ColumnName);
             Assert.AreEqual("COL2_ALIAS", col.ColumnAlias);
             Assert.AreEqual("SELECT [COL1], [COL2] [COL2_ALIAS] \nFROM [table]", SELECT.BuildSQL());
 
-            col = SELECT.Columns.Add("table.COL3 COL3_ALIAS");
+            col = SELECT.Columns.Add1("table.COL3 COL3_ALIAS");
             Assert.AreEqual("COL3", col.ColumnName);
             Assert.AreEqual("COL3_ALIAS", col.ColumnAlias);
             Assert.AreEqual("table", col.TableName);
@@ -204,7 +204,7 @@ namespace Library.Tests.SQLFactory
 
             var subSelect = SELECT.Where.AddInSelect("COL2").SubSelect;
             subSelect.FromTable.TableName = "table2";
-            subSelect.Columns.Add("RID");
+            subSelect.Columns.Add1("RID");
             subSelect.Where.Add("COL3 > 20");
             AssertSQL.AreEqual("SELECT * FROM [table] " + 
                                " WHERE ([COL1] in ('VALUE1', 'VALUE2', 'VALUE3') )" + 

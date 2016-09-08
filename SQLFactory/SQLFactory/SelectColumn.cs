@@ -52,7 +52,7 @@ namespace Library.SQLFactory
 
     public class SelectColumnList : CustomColumnList<SelectColumn>
     {
-        public SelectColumn Insert(int columnPos, String tableName, String columnName, String columnAlias) {
+        public SelectColumn Insert1(int columnPos, String tableName, String columnName, String columnAlias) {
             SelectColumn result = new SelectColumn();
             result.TableName = tableName;
             result.ColumnName = columnName;
@@ -65,42 +65,49 @@ namespace Library.SQLFactory
             return result;
         }
 
-        public SelectColumn Insert(int columnPos, String columnExpression, String columnAlias = "") {
+        public SelectColumn Insert1(int columnPos, String columnExpression, String columnAlias = "") {
+
             String tmpTableAlias = "";
             String tmpColExpr = columnExpression;
             String tmpColAlias = columnAlias;
 
-            if (String.IsNullOrEmpty(columnAlias))
+            SQLFactory.ParseColumnInfo(columnExpression, out tmpTableAlias, out tmpColExpr, out tmpColAlias);
+
+            if (!String.IsNullOrEmpty(columnAlias))
             {
-                SQLFactory.ParseColumnInfo(columnExpression, out tmpTableAlias, out tmpColExpr, out tmpColAlias);
+                tmpColAlias = columnAlias;
             }
 
-            return this.Insert(columnPos, tmpTableAlias, tmpColExpr, tmpColAlias);
+            return this.Insert1(columnPos, tmpTableAlias, tmpColExpr, tmpColAlias);
         }
 
-        public void Insert(int columnPos, String[] columnInfo)
+        public void Insert(int columnPos, params String[] columnInfo)
         {
-            for (int i = columnInfo.Length - 1; i > -1; i--)
+            foreach(var columnExpression in columnInfo)
             {
+                if (columnExpression == null)
+                    continue;
+                // Process the columnInfo element as if it were a comma separated list 
+                //  of columns
                 int p = 0;
-                String tmpColExpr = columnInfo[i].ParseNext(ref p, ", ", "\"", "[]");
-                String tmpColAlias = columnInfo[i].ParseNext(ref p, ", ", "\"", "[]");
-
-                Insert(columnPos, tmpColExpr, tmpColAlias);
+                while(p < columnExpression.Length) {
+                    String tmpColExpr = columnExpression.ParseNext(ref p, ",", "\"", "[]");
+                    Insert1(columnPos, tmpColExpr);
+                }
 
             }
         }
 
-        public SelectColumn Add(String columnExpression, String columnAlias = "") {
-            return this.Insert(this.Count(), columnExpression, columnAlias);
+        public SelectColumn Add1(String columnExpression, String columnAlias = "") {
+            return this.Insert1(this.Count(), columnExpression, columnAlias);
         }
 
-        public SelectColumn Add(String tableAlias, String columnExpression, String columnAlias)
+        public SelectColumn Add1(String tableAlias, String columnExpression, String columnAlias)
         {
-            return this.Insert(this.Count(), tableAlias, columnExpression, columnAlias);
+            return this.Insert1(this.Count(), tableAlias, columnExpression, columnAlias);
         }
 
-        public void Add(String[] columnInfo)
+        public void Add(params String[] columnInfo)
         {
             this.Insert(this.Count(), columnInfo);
         }

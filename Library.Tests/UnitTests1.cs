@@ -16,7 +16,10 @@ namespace Library.Tests
             Assert.AreEqual(100, Convert.ToInt32(o));
 
             o = "100.5";
-            Assert.AreEqual("100", String.Format("{0:####0}",Convert.ToDouble("100.5")));
+            d = Convert.ToDouble("100.5");
+            Assert.AreEqual("101", String.Format("{0:####0}",d));
+
+            Assert.AreEqual("101", String.Format("{0:####0}", Convert.ToDouble("100.5")));
         }
 
         [TestMethod]
